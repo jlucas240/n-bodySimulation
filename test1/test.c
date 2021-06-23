@@ -12,6 +12,9 @@
 long minSize;
 int i;
 struct octaTreeNode* root;
+struct list* vals;
+double theta;
+double G;
 
 // linked list 
 // used for bucket in octatree nodes
@@ -27,8 +30,12 @@ struct node{
     double z;
 
     double mass;
-    double acc;
-    double velocity;
+    double accX;
+    double accY;
+    double accZ;
+    double velocityX;
+    double velocityY;
+    double velocityZ;
 
     long int id;
 };
@@ -49,13 +56,16 @@ void insertlist(struct list** l, struct node** n){
     }
     
     // use a place holder to itorate thorugh the list untill the next node is NULL
-    struct list* hold = *l;
+    /*struct list* hold = *l;
     while (hold->next != NULL){
         hold = hold->next;
         
     }
     // then add to end of list
-    hold->next = newN;
+    hold->next = newN;*/
+    newN->next = *l;
+    *l = newN;
+
     return;
     
 };
@@ -129,12 +139,6 @@ void insertOctaTree(struct octaTreeNode** nt, struct node* n){
     // variable to hold new insertion
     struct node* newNode = n;
 
-    printf("mass: %lf, x: %lf, y: %lf, z: %lf,\n", 
-    n->mass, newNode->x, newNode->y, newNode->z);
-
-    printf("x : %lf - %lf, y : %lf - %lf, y : %lf - %lf, size : %lf\n", 
-    t->xmin, t->xmax, t->ymin, t->ymax, t->zmin, t->zmax, t->size);
-
 
     
     // there are no nodes in this sector/zone
@@ -169,8 +173,12 @@ void insertOctaTree(struct octaTreeNode** nt, struct node* n){
             hold2->x = n->x;
             hold2->y = n->y;
             hold2->z = n->z;
-            hold2->velocity = n->velocity;
-            hold2->acc = n->acc;
+            hold2->velocityX = n->velocityX;
+            hold2->velocityY = n->velocityY;
+            hold2->velocityZ = n->velocityZ;
+            hold2->accX = n->accX;
+            hold2->accY = n->accY;
+            hold2->accZ = n->accZ;
             hold2->id = n->id;
             insertlist(&t->nodes, &hold2);
             return ;
@@ -244,8 +252,12 @@ void insertOctaTree(struct octaTreeNode** nt, struct node* n){
                                 holdl->body->y,
                                 holdl->body->z,
                                 holdl->body->mass,
-                                holdl->body->acc,
-                                holdl->body->velocity,
+                                holdl->body->accX,
+                                holdl->body->accY,
+                                holdl->body->accZ,
+                                holdl->body->velocityX,
+                                holdl->body->velocityY,
+                                holdl->body->velocityZ,
                                 holdl->body->id};
                             holdn = holdl->next;
                             // set the tree list of nodes to null
@@ -319,8 +331,12 @@ void insertOctaTree(struct octaTreeNode** nt, struct node* n){
                                 holdl->body->y,
                                 holdl->body->z,
                                 holdl->body->mass,
-                                holdl->body->acc,
-                                holdl->body->velocity,
+                                holdl->body->accX,
+                                holdl->body->accY,
+                                holdl->body->accZ,
+                                holdl->body->velocityX,
+                                holdl->body->velocityY,
+                                holdl->body->velocityZ,
                                 holdl->body->id};
                             holdn = holdl->next;
                             // set the tree list of nodes to null
@@ -396,8 +412,12 @@ void insertOctaTree(struct octaTreeNode** nt, struct node* n){
                                 holdl->body->y,
                                 holdl->body->z,
                                 holdl->body->mass,
-                                holdl->body->acc,
-                                holdl->body->velocity,
+                                holdl->body->accX,
+                                holdl->body->accY,
+                                holdl->body->accZ,
+                                holdl->body->velocityX,
+                                holdl->body->velocityY,
+                                holdl->body->velocityZ,
                                 holdl->body->id};
                             holdn = holdl->next;
                             // set the tree list of nodes to null
@@ -470,8 +490,12 @@ void insertOctaTree(struct octaTreeNode** nt, struct node* n){
                                 holdl->body->y,
                                 holdl->body->z,
                                 holdl->body->mass,
-                                holdl->body->acc,
-                                holdl->body->velocity,
+                                holdl->body->accX,
+                                holdl->body->accY,
+                                holdl->body->accZ,
+                                holdl->body->velocityX,
+                                holdl->body->velocityY,
+                                holdl->body->velocityZ,
                                 holdl->body->id};
                             holdn = holdl->next;
                             // set the tree list of nodes to null
@@ -552,8 +576,12 @@ void insertOctaTree(struct octaTreeNode** nt, struct node* n){
                                 holdl->body->y,
                                 holdl->body->z,
                                 holdl->body->mass,
-                                holdl->body->acc,
-                                holdl->body->velocity,
+                                holdl->body->accX,
+                                holdl->body->accY,
+                                holdl->body->accZ,
+                                holdl->body->velocityX,
+                                holdl->body->velocityY,
+                                holdl->body->velocityZ,
                                 holdl->body->id};
                             holdn = holdl->next;
                             // set the tree list of nodes to null
@@ -627,8 +655,12 @@ void insertOctaTree(struct octaTreeNode** nt, struct node* n){
                                 holdl->body->y,
                                 holdl->body->z,
                                 holdl->body->mass,
-                                holdl->body->acc,
-                                holdl->body->velocity,
+                                holdl->body->accX,
+                                holdl->body->accY,
+                                holdl->body->accZ,
+                                holdl->body->velocityX,
+                                holdl->body->velocityY,
+                                holdl->body->velocityZ,
                                 holdl->body->id};
                             holdn = holdl->next;
                             // set the tree list of nodes to null
@@ -705,8 +737,12 @@ void insertOctaTree(struct octaTreeNode** nt, struct node* n){
                                 holdl->body->y,
                                 holdl->body->z,
                                 holdl->body->mass,
-                                holdl->body->acc,
-                                holdl->body->velocity,
+                                holdl->body->accX,
+                                holdl->body->accY,
+                                holdl->body->accZ,
+                                holdl->body->velocityX,
+                                holdl->body->velocityY,
+                                holdl->body->velocityZ,
                                 holdl->body->id};
                             holdn = holdl->next;
                             // set the tree list of nodes to null
@@ -780,8 +816,12 @@ void insertOctaTree(struct octaTreeNode** nt, struct node* n){
                                 holdl->body->y,
                                 holdl->body->z,
                                 holdl->body->mass,
-                                holdl->body->acc,
-                                holdl->body->velocity,
+                                holdl->body->accX,
+                                holdl->body->accY,
+                                holdl->body->accZ,
+                                holdl->body->velocityX,
+                                holdl->body->velocityY,
+                                holdl->body->velocityZ,
                                 holdl->body->id};
                             holdn = holdl->next;
                             // set the tree list of nodes to null
@@ -884,9 +924,23 @@ void readIn(){
         z = q*sin(i * (M_PI / 180));
 
         struct node n ={gm, x, y, z, 0, 0, id};
+        struct node* n1 = (struct node*)malloc(sizeof(struct node));
+        n1->mass = gm;
+        n1->x = x;
+        n1->y = y;
+        n1->z = z;
+        n1->id = id;
+        n1->accX = 0;
+        n1->accY = 0;
+        n1->accZ = 0;
+        n1->velocityX = 0;
+        n1->velocityY = 0;
+        n1->velocityZ = 0;
         //n->mass = gm; // fix this to just mass
          // add insert to tree
-         insertOctaTree(&root, &n);
+        insertOctaTree(&root, &n);
+
+        insertlist(&vals, &n1);
         
         ++id;
     }
@@ -902,8 +956,7 @@ struct calcVal{
     double accZ;
 };
 
-double theta;
-double G;
+
 
 // calaulates acceleration
 
@@ -944,8 +997,421 @@ double G;
     
 }*/
 
+/******************************calculations**************************/
+
+
+
+void calculation(struct node* n, struct calcVal** c, struct octaTreeNode** t){
+    // itorate through tree intill distence qualifier is met
+    // to test the use the range of each node to varify n is not being
+    // added to the calculations
+    
+    struct calcVal* calc = *c;
+    struct octaTreeNode* tree = *t;
+    
+    // when a leaf node add values to c
+    if(tree->nodes != NULL){
+        struct list* l = tree->nodes;
+        double mass = 0;
+        while(l!= NULL){
+            if(l->body->id != n->id){mass += l->body->mass;}
+            l = l->next;
+        }
+
+        double holdx;
+        double holdy;
+        double holdz;
+        
+        if(n->x != tree->nodes->body->x){
+            holdx = (G *mass)/pow(fabs(n->x - tree->nodes->body->x), 3);
+        }else{
+            holdx = 0;
+        }
+        if(n->y != tree->nodes->body->y){
+            holdy = (G *mass)/pow(fabs(n->y - tree->nodes->body->y), 3);
+        }else{
+            holdy = 0;
+        }
+        if(n->z != tree->nodes->body->z){
+            holdz = (G *mass)/pow(fabs(n->z - tree->nodes->body->z), 3);
+        }else{
+            holdz = 0;
+        }
+
+        calc->accX += (n->x - tree->nodes->body->x) * holdx;
+        calc->accY += (n->y - tree->nodes->body->y) * holdy;
+        calc->accZ += (n->z - tree->nodes->body->z) * holdz;
+        return;
+    }
+    //if child != NULL, when ti is in zone go to child
+    // otherwise if size of node/distace from center of mass is smaller 
+    // than theta  compute aproximet accelerations esle go to zone
+    if(tree->c0 != NULL){
+        if(tree->xmin < n->x && tree->xmax > n->x &&
+         tree->ymin < n->y && tree->ymax > n->y && 
+         tree->zmin < n->z && tree->zmax > n->z){
+            calculation(n, &calc, &tree->c0);
+        }
+        else if(tree->c0->size/pow(pow(tree->c0->cmx-n->x,2)+pow(tree->c0->cmy-n->y,2)+pow(tree->c0->cmz-n->z,2), 1/2) < theta){
+            double holdx;
+            double holdy;
+            double holdz;
+            
+            if(n->x != tree->nodes->body->x){
+                holdx = (G *tree->c0->mass)/pow(fabs(n->x - tree->nodes->body->x), 3);
+            }else{
+                holdx = 0;
+            }
+            if(n->y != tree->nodes->body->y){
+                holdy = (G *tree->c0->mass)/pow(fabs(n->y - tree->nodes->body->y), 3);
+            }else{
+                holdy = 0;
+            }
+            if(n->z != tree->nodes->body->z){
+                holdz = (G *tree->c0->mass)/pow(fabs(n->z - tree->nodes->body->z), 3);
+            }else{
+                holdz = 0;
+            }
+            calc->accX += (n->x - tree->c0->nodes->body->x) * holdx;
+            calc->accY += (n->y - tree->c0->nodes->body->y) * holdy;
+            calc->accZ += (n->z - tree->c0->nodes->body->z) * holdz;
+        }
+        else{calculation(n, &calc, &tree->c0);}
+    }
+    if(tree->c1 != NULL){
+        if(tree->xmin < n->x && tree->xmax > n->x &&
+         tree->ymin < n->y && tree->ymax > n->y && 
+         tree->zmin < n->z && tree->zmax > n->z){
+            calculation(n, &calc, &tree->c1);
+        }
+        else if(tree->c1->size/pow(pow(tree->c1->cmx-n->x,2)+pow(tree->c1->cmy-n->y,2)+pow(tree->c1->cmz-n->z,2), 1/2) < theta){
+            double holdx;
+            double holdy;
+            double holdz;
+            
+            if(n->x != tree->nodes->body->x){
+                holdx = (G *tree->c1->mass)/pow(fabs(n->x - tree->nodes->body->x), 3);
+            }else{
+                holdx = 0;
+            }
+            if(n->y != tree->nodes->body->y){
+                holdy = (G *tree->c1->mass)/pow(fabs(n->y - tree->nodes->body->y), 3);
+            }else{
+                holdy = 0;
+            }
+            if(n->z != tree->nodes->body->z){
+                holdz = (G *tree->c1->mass)/pow(fabs(n->z - tree->nodes->body->z), 3);
+            }else{
+                holdz = 0;
+            }
+            calc->accX += (n->x - tree->c1->nodes->body->x) * holdx;
+            calc->accY += (n->y - tree->c1->nodes->body->y) * holdy;
+            calc->accZ += (n->z - tree->c1->nodes->body->z) * holdz;
+        }
+        else{calculation(n, &calc, &tree->c1);}
+    }
+    if(tree->c2 != NULL){
+        if(tree->xmin < n->x && tree->xmax > n->x &&
+         tree->ymin < n->y && tree->ymax > n->y && 
+         tree->zmin < n->z && tree->zmax > n->z){
+            calculation(n, &calc, &tree->c2);
+        }
+        else if(tree->c2->size/pow(pow(tree->c2->cmx-n->x,2)+pow(tree->c2->cmy-n->y,2)+pow(tree->c2->cmz-n->z,2), 1/2) < theta){
+            double holdx;
+            double holdy;
+            double holdz;
+            
+            if(n->x != tree->nodes->body->x){
+                holdx = (G *tree->c2->mass)/pow(fabs(n->x - tree->nodes->body->x), 3);
+            }else{
+                holdx = 0;
+            }
+            if(n->y != tree->nodes->body->y){
+                holdy = (G *tree->c2->mass)/pow(fabs(n->y - tree->nodes->body->y), 3);
+            }else{
+                holdy = 0;
+            }
+            if(n->z != tree->nodes->body->z){
+                holdz = (G *tree->c2->mass)/pow(fabs(n->z - tree->nodes->body->z), 3);
+            }else{
+                holdz = 0;
+            }
+            calc->accX += (n->x - tree->c2->nodes->body->x) * holdx;
+            calc->accY += (n->y - tree->c2->nodes->body->y) * holdy;
+            calc->accZ += (n->z - tree->c2->nodes->body->z) * holdz;
+        }
+        else{calculation(n, &calc, &tree->c2);}
+    }
+    if(tree->c3 != NULL){
+        if(tree->xmin < n->x && tree->xmax > n->x &&
+         tree->ymin < n->y && tree->ymax > n->y && 
+         tree->zmin < n->z && tree->zmax > n->z){
+            calculation(n, &calc, &tree->c3);
+        }
+        else if(tree->c3->size/pow(pow(tree->c3->cmx-n->x,2)+pow(tree->c3->cmy-n->y,2)+pow(tree->c3->cmz-n->z,2), 1/2) < theta){
+            double holdx;
+            double holdy;
+            double holdz;
+            
+            if(n->x != tree->nodes->body->x){
+                holdx = (G *tree->c3->mass)/pow(fabs(n->x - tree->nodes->body->x), 3);
+            }else{
+                holdx = 0;
+            }
+            if(n->y != tree->nodes->body->y){
+                holdy = (G *tree->c3->mass)/pow(fabs(n->y - tree->nodes->body->y), 3);
+            }else{
+                holdy = 0;
+            }
+            if(n->z != tree->nodes->body->z){
+                holdz = (G *tree->c3->mass)/pow(fabs(n->z - tree->nodes->body->z), 3);
+            }else{
+                holdz = 0;
+            }
+            calc->accX += (n->x - tree->c3->nodes->body->x) * holdx;
+            calc->accY += (n->y - tree->c3->nodes->body->y) * holdy;
+            calc->accZ += (n->z - tree->c3->nodes->body->z) * holdz;
+        }
+        else{calculation(n, &calc, &tree->c3);}
+    }
+    if(tree->c4 != NULL){
+        if(tree->xmin < n->x && tree->xmax > n->x &&
+         tree->ymin < n->y && tree->ymax > n->y && 
+         tree->zmin < n->z && tree->zmax > n->z){
+            calculation(n, &calc, &tree->c4);
+        }
+        else if(tree->c4->size/pow(pow(tree->c4->cmx-n->x,2)+pow(tree->c4->cmy-n->y,2)+pow(tree->c4->cmz-n->z,2), 1/2) < theta){
+            double holdx;
+            double holdy;
+            double holdz;
+            
+            if(n->x != tree->nodes->body->x){
+                holdx = (G *tree->c4->mass)/pow(fabs(n->x - tree->nodes->body->x), 3);
+            }else{
+                holdx = 0;
+            }
+            if(n->y != tree->nodes->body->y){
+                holdy = (G *tree->c4->mass)/pow(fabs(n->y - tree->nodes->body->y), 3);
+            }else{
+                holdy = 0;
+            }
+            if(n->z != tree->nodes->body->z){
+                holdz = (G *tree->c4->mass)/pow(fabs(n->z - tree->nodes->body->z), 3);
+            }else{
+                holdz = 0;
+            }
+            calc->accX += (n->x - tree->c4->nodes->body->x) * holdx;
+            calc->accY += (n->y - tree->c4->nodes->body->y) * holdy;
+            calc->accZ += (n->z - tree->c4->nodes->body->z) * holdz;
+        }
+        else{calculation(n, &calc, &tree->c4);}
+    }
+    if(tree->c5 != NULL){
+        if(tree->xmin < n->x && tree->xmax > n->x &&
+         tree->ymin < n->y && tree->ymax > n->y && 
+         tree->zmin < n->z && tree->zmax > n->z){
+            calculation(n, &calc, &tree->c5);
+        }
+        else if(tree->c5->size/pow(pow(tree->c5->cmx-n->x,2)+pow(tree->c5->cmy-n->y,2)+pow(tree->c5->cmz-n->z,2), 1/2) < theta){
+            double holdx;
+            double holdy;
+            double holdz;
+            
+            if(n->x != tree->nodes->body->x){
+                holdx = (G *tree->c5->mass)/pow(fabs(n->x - tree->nodes->body->x), 3);
+            }else{
+                holdx = 0;
+            }
+            if(n->y != tree->nodes->body->y){
+                holdy = (G *tree->c5->mass)/pow(fabs(n->y - tree->nodes->body->y), 3);
+            }else{
+                holdy = 0;
+            }
+            if(n->z != tree->nodes->body->z){
+                holdz = (G *tree->c5->mass)/pow(fabs(n->z - tree->nodes->body->z), 3);
+            }else{
+                holdz = 0;
+            }
+            calc->accX += (n->x - tree->c5->nodes->body->x) * holdx;
+            calc->accY += (n->y - tree->c5->nodes->body->y) * holdy;
+            calc->accZ += (n->z - tree->c5->nodes->body->z) * holdz;
+        }
+        else{calculation(n, &calc, &tree->c5);}
+    }
+    if(tree->c6 != NULL){
+        if(tree->xmin < n->x && tree->xmax > n->x &&
+         tree->ymin < n->y && tree->ymax > n->y && 
+         tree->zmin < n->z && tree->zmax > n->z){
+            calculation(n, &calc, &tree->c6);
+        }
+        else if(tree->c6->size/pow(pow(tree->c6->cmx-n->x,2)+pow(tree->c6->cmy-n->y,2)+pow(tree->c6->cmz-n->z,2), 1/2) < theta){
+            double holdx;
+            double holdy;
+            double holdz;
+            
+            if(n->x != tree->nodes->body->x){
+                holdx = (G *tree->c6->mass)/pow(fabs(n->x - tree->nodes->body->x), 3);
+            }else{
+                holdx = 0;
+            }
+            if(n->y != tree->nodes->body->y){
+                holdy = (G *tree->c6->mass)/pow(fabs(n->y - tree->nodes->body->y), 3);
+            }else{
+                holdy = 0;
+            }
+            if(n->z != tree->nodes->body->z){
+                holdz = (G *tree->c6->mass)/pow(fabs(n->z - tree->nodes->body->z), 3);
+            }else{
+                holdz = 0;
+            }
+            calc->accX += (n->x - tree->c6->nodes->body->x) * holdx;
+            calc->accY += (n->y - tree->c6->nodes->body->y) * holdy;
+            calc->accZ += (n->z - tree->c6->nodes->body->z) * holdz;
+        }
+        else{calculation(n, &calc, &tree->c6);}
+    }
+    if(tree->c7 != NULL){
+        if(tree->xmin < n->x && tree->xmax > n->x &&
+         tree->ymin < n->y && tree->ymax > n->y && 
+         tree->zmin < n->z && tree->zmax > n->z){
+            calculation(n, &calc, &tree->c7);
+        }
+        else if(tree->c7->size/pow(pow(tree->c7->cmx-n->x,2)+pow(tree->c7->cmy-n->y,2)+pow(tree->c7->cmz-n->z,2), 1/2) < theta){
+            double holdx;
+            double holdy;
+            double holdz;
+            
+            if(n->x != tree->nodes->body->x){
+                holdx = (G *tree->c7->mass)/pow(fabs(n->x - tree->nodes->body->x), 3);
+            }else{
+                holdx = 0;
+            }
+            if(n->y != tree->nodes->body->y){
+                holdy = (G *tree->c7->mass)/pow(fabs(n->y - tree->nodes->body->y), 3);
+            }else{
+                holdy = 0;
+            }
+            if(n->z != tree->nodes->body->z){
+                holdz = (G *tree->c7->mass)/pow(fabs(n->z - tree->nodes->body->z), 3);
+            }else{
+                holdz = 0;
+            }
+            calc->accX += (n->x - tree->c7->nodes->body->x) * holdx;
+            calc->accY += (n->y - tree->c7->nodes->body->y) * holdy;
+            calc->accZ += (n->z - tree->c7->nodes->body->z) * holdz;
+        }
+        else{calculation(n, &calc, &tree->c7);}
+    }
+    return;
+    
+}
+
+void movment(){
+    // create new tree
+    struct octaTreeNode* tempt = (struct octaTreeNode*)malloc(sizeof(struct octaTreeNode));
+    tempt->c0 = NULL;
+    tempt->c1 = NULL;
+    tempt->c2 = NULL;
+    tempt->c3 = NULL;
+    tempt->c4 = NULL;
+    tempt->c5 = NULL;
+    tempt->c6 = NULL;
+    tempt->c7 = NULL;
+    tempt->nodes = NULL;
+    tempt->xmin = -100;
+    tempt->xmax = 100;
+    tempt->ymin = -100;
+    tempt->ymax = 100;
+    tempt->zmin = -100;
+    tempt->zmax = 100;
+    tempt->leaf= true;
+    //create new list
+    struct list* templ = (struct list*)malloc(sizeof(struct list));
+    templ->body = NULL;
+    templ->next = NULL;
+    // itorate trought vals
+    struct list* hold = vals;
+    while(hold != NULL){
+        // create node as value and pointer;
+        struct node newN = {hold->body->x, 
+            hold->body->y,
+            hold->body->z,
+            hold->body->mass,
+            hold->body->accX,
+            hold->body->accY,
+            hold->body->accZ,
+            hold->body->velocityX,
+            hold->body->velocityY,
+            hold->body->velocityZ,
+            hold->body->id};
+        
+        struct node* newN1 = (struct node*)malloc(sizeof(struct node));
+        newN1->x = hold->body->x;
+        newN1->y = hold->body->y;
+        newN1->z = hold->body->z;
+        newN1->mass = hold->body->mass;
+        newN1->accX = hold->body->accX;
+        newN1->accY = hold->body->accY;
+        newN1->accZ = hold->body->accZ;
+        newN1->velocityX = hold->body->velocityX;
+        newN1->velocityY= hold->body->velocityY;
+        newN1->velocityZ = hold->body->velocityZ;
+        newN1->id = hold->body->id;
+        printf("x: %lf, y: %lf, z: %lf, id: %ld\n", newN.x, newN.y, newN.z, newN.id);
+        // at each node calculate the acceleration on the node
+        struct calcVal* cal = (struct calcVal*)malloc(sizeof(struct calcVal));
+        cal->accX = hold->body->accX;
+        cal->accY = hold->body->accY;
+        cal->accZ = hold->body->accZ;
+        // call calculation fucntion here
+        calculation(hold->body, &cal, &root);
+        
+        newN1->accX = cal->accX;
+        newN1->accY = cal->accY;
+        newN1->accZ = cal->accZ;
+        // the change in velocity 
+        newN1->velocityX = hold->body->velocityX + cal->accX;
+        newN1->velocityY = hold->body->velocityY + cal->accY;
+        newN1->velocityZ = hold->body->velocityZ + cal->accZ;
+        // the change in posintion over 1 time unit
+        newN1->x = hold->body->x + newN1->velocityX + .5*cal->accX;
+        newN1->y = hold->body->y + newN1->velocityY + .5*cal->accY;
+        newN1->z = hold->body->z + newN1->velocityZ + .5*cal->accZ;
+        // set node for tree
+        newN.accX = newN1->accX;
+        newN.accY = newN1->accY;
+        newN.accZ = newN1->accZ;
+        newN.velocityX = newN1->velocityX;
+        newN.velocityY = newN1->velocityY;
+        newN.velocityZ = newN1->velocityZ;
+        newN.x = newN1->x;
+        newN.y = newN1->y;
+        newN.z = newN1->z;
+        printf("x: %lf, y: %lf, z: %lf, id: %ld\n", newN.x, newN.y, newN.z, newN.id);
+        // add to new tree
+        insertOctaTree(&tempt, &newN);
+        insertlist(&templ, &newN1);
+        // clear used memory
+        free(cal);
+
+        
+
+        hold = hold->next;
+    }
+    // delete root and vals 
+    deleteOctaTree(&root);
+    deleteList(&vals);
+    // set root equal to new tree and vals = to new list
+    root = tempt;
+    vals = templ;
+    return;
+}
 
 void main(){
+
+    G = 1;
+    theta = .5;
+
     //*************************************list tests********************
 
     /*struct list* l0 = NULL;
@@ -986,33 +1452,226 @@ void main(){
     t->c6 = NULL;
     t->c7 = NULL;
     t->nodes = NULL;
-    t->xmin = 1;
-    t->xmax = 30;
-    t->ymin = 1;
-    t->ymax = 30;
-    t->zmin = 1;
-    t->zmax = 30;
-    t->size = 30*30*30;
+    t->xmin = -100;
+    t->xmax = 100;
+    t->ymin = -100;
+    t->ymax = 100;
+    t->zmin = -100;
+    t->zmax = 100;
+    t->size = 100*100*100;
     t->leaf= true;
 
     
 
-    struct node n1 = {1,1,1,10};
-    struct node n2 = {1,5,1,12};
-    struct node n3 = {12,1,7,13};
-    struct node n4 = {1,18,7,14};
-    struct node n5 = {17,1,7,15};
-    struct node n6 = {1,1,7,16};
-    struct node n7 = {5,1,10,17};
-    struct node n8 = {1,1,7,18};
-    struct node n9 = {1,1,7,19};
-    struct node n10 = {1,12,7,20};
-    struct node n13 = {1,16,7,23};
-    struct node n14 = {1,15,7,24};
-    struct node n15 = {1,14,7,25};
-    struct node n16 = {1,13,7,26};
-    struct node n11 = {14,1,7,21};
-    struct node n12 = {1,1,16,22};
+    struct node n1 = {1,1,1,10,0,0,0,0,0,0,0};
+    struct node* n00 = (struct node*)malloc(sizeof(struct node));
+    n00->x =1;
+    n00->y =1;
+    n00->z =1;
+    n00->mass =10;
+    n00->accX=0;
+    n00->accY=0;
+    n00->accZ=0;
+    n00->velocityX=0;
+    n00->velocityY=0;
+    n00->velocityZ=0;
+    n00->id=0;
+
+    struct node n2 = {1,5,1,12,0,0,0,0,0,0,1};
+    struct node* n01 = (struct node*)malloc(sizeof(struct node));
+    n01->x =1;
+    n01->y =5;
+    n01->z =1;
+    n01->mass =12;
+    n01->accX=0;
+    n01->accY=0;
+    n01->accZ=0;
+    n01->velocityX=0;
+    n01->velocityY=0;
+    n01->velocityZ=0;
+    n01->id=1;
+    struct node n3 = {12,1,7,13,0,0,0,0,0,0,2};
+    struct node* n02 = (struct node*)malloc(sizeof(struct node));
+    n02->x =12;
+    n02->y =1;
+    n02->z =7;
+    n02->mass =13;
+    n02->accX=0;
+    n02->accY=0;
+    n02->accZ=0;
+    n02->velocityX=0;
+    n02->velocityY=0;
+    n02->velocityZ=0;
+    n02->id=2;
+    struct node n4 = {1,18,7,14,0,0,0,0,0,0,3};
+    struct node* n03 = (struct node*)malloc(sizeof(struct node));
+    n03->x =1;
+    n03->y =18;
+    n03->z =7;
+    n03->mass =14;
+    n03->accX=0;
+    n03->accY=0;
+    n03->accZ=0;
+    n03->velocityX=0;
+    n03->velocityY=0;
+    n03->velocityZ=0;
+    n03->id=3;
+    struct node n5 = {17,1,7,15,0,0,0,0,0,0,4};
+    struct node* n04 = (struct node*)malloc(sizeof(struct node));
+    n04->x =17;
+    n04->y =1;
+    n04->z =7;
+    n04->mass =15;
+    n04->accX=0;
+    n04->accY=0;
+    n04->accZ=0;
+    n04->velocityX=0;
+    n04->velocityY=0;
+    n04->velocityZ=0;
+    n04->id=4;
+    struct node n6 = {1,1,7,16,0,0,0,0,0,0,5};
+    struct node* n05 = (struct node*)malloc(sizeof(struct node));
+    n05->x =1;
+    n05->y =1;
+    n05->z =7;
+    n05->mass =16;
+    n05->accX=0;
+    n05->accY=0;
+    n05->accZ=0;
+    n05->velocityX=0;
+    n05->velocityY=0;
+    n05->velocityZ=0;
+    n05->id=5;
+    struct node n7 = {5,1,10,17,0,0,0,0,0,0,6};
+    struct node* n06 = (struct node*)malloc(sizeof(struct node));
+    n06->x =5;
+    n06->y =1;
+    n06->z =10;
+    n06->mass =17;
+    n06->accX=0;
+    n06->accY=0;
+    n06->accZ=0;
+    n06->velocityX=0;
+    n06->velocityY=0;
+    n06->velocityZ=0;
+    n06->id=6;
+    struct node n8 = {1,1,7,18,0,0,0,0,0,0,7};
+    struct node* n07 = (struct node*)malloc(sizeof(struct node));
+    n07->x =1;
+    n07->y =1;
+    n07->z =7;
+    n07->mass =18;
+    n07->accX=0;
+    n07->accY=0;
+    n07->accZ=0;
+    n07->velocityX=0;
+    n07->velocityY=0;
+    n07->velocityZ=0;
+    n07->id=7;
+    struct node n9 = {1,1,7,19,0,0,0,0,0,0,8};
+    struct node* n08 = (struct node*)malloc(sizeof(struct node));
+    n08->x =1;
+    n08->y =1;
+    n08->z =7;
+    n08->mass =19;
+    n08->accX=0;
+    n08->accY=0;
+    n08->accZ=0;
+    n08->velocityX=0;
+    n08->velocityY=0;
+    n08->velocityZ=0;
+    n08->id=8;
+    struct node n10 = {1,12,7,20,0,0,0,0,0,0,9};
+    struct node* n09 = (struct node*)malloc(sizeof(struct node));
+    n09->x =1;
+    n09->y =12;
+    n09->z =7;
+    n09->mass =20;
+    n09->accX=0;
+    n09->accY=0;
+    n09->accZ=0;
+    n09->velocityX=0;
+    n09->velocityY=0;
+    n09->velocityZ=0;
+    n09->id=9;
+    struct node n13 = {1,16,7,23,0,0,0,0,0,0,10};
+    struct node* n010 = (struct node*)malloc(sizeof(struct node));
+    n010->x =1;
+    n010->y =16;
+    n010->z =7;
+    n010->mass =23;
+    n010->accX=0;
+    n010->accY=0;
+    n010->accZ=0;
+    n010->velocityX=0;
+    n010->velocityY=0;
+    n010->velocityZ=0;
+    n010->id=10;
+    struct node n14 = {1,15,7,24,0,0,0,0,0,0,11};
+    struct node* n011 = (struct node*)malloc(sizeof(struct node));
+    n011->x =1;
+    n011->y =15;
+    n011->z =7;
+    n011->mass =24;
+    n011->accX=0;
+    n011->accY=0;
+    n011->accZ=0;
+    n011->velocityX=0;
+    n011->velocityY=0;
+    n011->velocityZ=0;
+    n011->id=11;
+    struct node n15 = {1,14,7,25,0,0,0,0,0,0,12};
+    struct node* n012 = (struct node*)malloc(sizeof(struct node));
+    n012->x =1;
+    n012->y =14;
+    n012->z =7;
+    n012->mass =25;
+    n012->accX=0;
+    n012->accY=0;
+    n012->accZ=0;
+    n012->velocityX=0;
+    n012->velocityY=0;
+    n012->velocityZ=0;
+    n012->id=12;
+    struct node n16 = {1,13,7,26,0,0,0,0,0,0,13};
+    struct node* n013 = (struct node*)malloc(sizeof(struct node));
+    n013->x =1;
+    n013->y =13;
+    n013->z =7;
+    n013->mass =26;
+    n013->accX=0;
+    n013->accY=0;
+    n013->accZ=0;
+    n013->velocityX=0;
+    n013->velocityY=0;
+    n013->velocityZ=0;
+    n013->id=13;
+    struct node n11 = {14,1,7,21,0,0,0,0,0,0,14};
+    struct node* n014 = (struct node*)malloc(sizeof(struct node));
+    n014->x =14;
+    n014->y =1;
+    n014->z =7;
+    n014->mass =21;
+    n014->accX=0;
+    n014->accY=0;
+    n014->accZ=0;
+    n014->velocityX=0;
+    n014->velocityY=0;
+    n014->velocityZ=0;
+    n014->id=14;
+    struct node n12 = {1,1,16,22,0,0,0,0,0,0,15};
+    struct node* n015 = (struct node*)malloc(sizeof(struct node));
+    n015->x =1;
+    n015->y =1;
+    n015->z =16;
+    n015->mass =22;
+    n015->accX=0;
+    n015->accY=0;
+    n015->accZ=0;
+    n015->velocityX=0;
+    n015->velocityY=0;
+    n015->velocityZ=0;
+    n015->id=15;
     i = 0;
     insertOctaTree(&t, &n1);
     insertOctaTree(&t, &n2);
@@ -1031,8 +1690,34 @@ void main(){
     insertOctaTree(&t, &n16);
     insertOctaTree(&t, &n11);
     insertOctaTree(&t, &n12);
-    deleteOctaTree(&t);
-    free(t);
+    root = t;
+    insertlist(&vals, &n00);
+    insertlist(&vals, &n01);
+    insertlist(&vals, &n02);
+    insertlist(&vals, &n03);
+    insertlist(&vals, &n04);
+    insertlist(&vals, &n05);
+    insertlist(&vals, &n06);
+    insertlist(&vals, &n07);
+    insertlist(&vals, &n08);
+    insertlist(&vals, &n09);
+    insertlist(&vals, &n010);
+    insertlist(&vals, &n011);
+    insertlist(&vals, &n012);
+    insertlist(&vals, &n013);
+    insertlist(&vals, &n014);
+    insertlist(&vals, &n015);
+
+    movment();
+    /*movment();
+    movment();
+    movment();
+    movment();
+    movment();*/
+
+    deleteOctaTree(&root);
+    deleteList(&vals);
+    //free(t);
 
     //****************** read test*******************
     //root =(struct octaTreeNode*) malloc(sizeof(struct octaTreeNode));
